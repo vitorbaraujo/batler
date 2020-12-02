@@ -4,27 +4,35 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/vitorbaraujo/batler/configuration"
 )
 
 type client struct {
-	workspace, scheme, buildDir string
+	workspace, scheme, buildDir, xcodeDir string
 	cleanEnabled, buildEnabled, testEnabled bool
 }
 
 type Option func(*client)
 
-func NewClient(workspace, scheme, buildDir string, opts ...Option) *client {
+func NewClient(config *configuration.Configuration, opts ...Option) (*client, error) {
+	xcodeDir, err := config.XcodeDir()
+	if err != nil {
+		return nil, fmt.Errorf("fetching xcode developer directory: %w", err)
+	}
+
 	c := &client{
-		workspace: workspace,
-		scheme: scheme,
-		buildDir: buildDir,
+		workspace: config.Workspace,
+		scheme: config.Scheme,
+		buildDir: config.BuildDir,
+		xcodeDir: xcodeDir,
 	}
 
 	for _, opt := range opts {
 		opt(c)
 	}
 
-	return c
+	return c, nil
 }
 
 func WithClean() Option {
@@ -66,11 +74,14 @@ func (c *client) Run() error {
 	}
 
 	cmd := exec.Command("xcodebuild", args...)
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, fmt.Sprintf("DEVELOPER_DIR=%s", c.xcodeDir))
+
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("error running xcodebuild: %v", err)
+		return fmt.Errorf("error running xcodebuild: %w", err)
 	}
 
 	return nil
