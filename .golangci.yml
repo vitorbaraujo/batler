@@ -1,7 +1,9 @@
 linters:
   enable-all: true
   disable:
+    - exhaustivestruct
     - funlen
+    - gci
     - gochecknoglobals
     - gochecknoinits
     - goerr113

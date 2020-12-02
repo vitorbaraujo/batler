@@ -1,27 +1,41 @@
 package main
 
 import (
-	"flag"
 	"log"
+	"os"
 
 	"github.com/vitorbaraujo/batler/configuration"
 	"github.com/vitorbaraujo/batler/xcodebuild"
+
+	"github.com/spf13/cobra"
 )
 
-var config *configuration.Configuration
+var (
+	config  *configuration.Configuration
+	rootCmd = &cobra.Command{
+		Use:   "batler",
+		Short: "Batler is an Xcode test CLI for continuous integration",
+		Run: func(cmd *cobra.Command, args []string) {
+			runBatler()
+		},
+	}
+	flags = struct {
+		projectPath string
+	}{}
+)
 
 func init() {
-	projectPath := flag.String("p", "", "Project path to run batler")
-	flag.Parse()
+	rootCmd.Flags().StringVar(&flags.projectPath, "project_path", "",
+		"An iOS project path that contains a .batler.yml file.")
+}
 
+func runBatler() {
 	var err error
-	config, err = configuration.FetchConfiguration(*projectPath)
+	config, err = configuration.FetchConfiguration(flags.projectPath)
 	if err != nil {
 		log.Fatalf("could not fetch configuration: %v", err)
 	}
-}
 
-func main() {
 	client, err := xcodebuild.NewClient(config,
 		xcodebuild.WithClean(), xcodebuild.WithBuild(), xcodebuild.WithTest())
 	if err != nil {
@@ -30,5 +44,11 @@ func main() {
 
 	if err := client.Run(); err != nil {
 		log.Printf("could not run client: %v", err)
+	}
+}
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
 	}
 }
