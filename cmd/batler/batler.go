@@ -50,7 +50,9 @@ func fetchConfiguration(projectPath string) (*Configuration, error) {
 	}
 
 	c := Configuration{}
-	yaml.Unmarshal(yamlFile, &c)
+	if err := yaml.Unmarshal(yamlFile, &c); err != nil {
+		return nil, fmt.Errorf("could not parse yaml file: %w", err)
+	}
 
 	c.Workspace = filepath.Join(projectPath, c.Workspace)
 	// TODO (vitor.araujo): also join projectPath with c.BuildDir
