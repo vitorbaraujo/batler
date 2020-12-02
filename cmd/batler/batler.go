@@ -8,9 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"batler/xcode"
-
 	"gopkg.in/yaml.v2"
+
+	"batler/xcodebuild"
 )
 
 func main() {
@@ -22,8 +22,8 @@ func main() {
 		log.Fatalf("could not fetch configuration: %v", err)
 	}
 
-	client := xcode.NewClient(config.Workspace, config.Scheme, config.BuildDir,
-		xcode.WithClean(), xcode.WithBuild(), xcode.WithTest())
+	client := xcodebuild.NewClient(config.Workspace, config.Scheme, config.BuildDir,
+		xcodebuild.WithClean(), xcodebuild.WithBuild(), xcodebuild.WithTest())
 
 	if err := client.Run(); err != nil {
 		log.Printf("could not run client: %v", err)
