@@ -2,4 +2,7 @@ module batler
 
 go 1.15
 
-require gopkg.in/yaml.v2 v2.3.0
+require (
+	github.com/kylelemons/godebug v1.1.0
+	gopkg.in/yaml.v2 v2.3.0
+)

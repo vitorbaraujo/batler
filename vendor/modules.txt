@@ -1,3 +1,7 @@
+# github.com/kylelemons/godebug v1.1.0
+## explicit
+github.com/kylelemons/godebug/diff
+github.com/kylelemons/godebug/pretty
 # gopkg.in/yaml.v2 v2.3.0
 ## explicit
 gopkg.in/yaml.v2
