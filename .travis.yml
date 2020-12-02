@@ -5,3 +5,4 @@ go:
 
 script:
   - make lint check cover
+  - go run github.com/mattn/goveralls -coverprofile=coverage.out -service=travis-ci
