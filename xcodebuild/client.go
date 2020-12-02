@@ -1,4 +1,4 @@
-package xcode
+package xcodebuild
 
 import (
 	"fmt"
