@@ -1,10 +1,10 @@
 package simctl_test
 
 import (
-	"batler/simctl"
 	"testing"
 
 	"github.com/kylelemons/godebug/pretty"
+	"github.com/vitorbaraujo/batler/simctl"
 )
 
 func TestParseRuntimes(t *testing.T) {

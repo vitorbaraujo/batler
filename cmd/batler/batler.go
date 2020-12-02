@@ -10,7 +10,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"batler/xcodebuild"
+	"github.com/vitorbaraujo/batler/xcodebuild"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module batler
+module github.com/vitorbaraujo/batler
 
 go 1.15
 
