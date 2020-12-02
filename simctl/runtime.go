@@ -13,7 +13,7 @@ type Runtimes struct {
 type Runtime struct {
 	Name       string
 	Identifier string
-	Available bool `json:"isAvailable"`
+	Available  bool `json:"isAvailable"`
 }
 
 func ListRuntimes() ([]*Runtime, error) {

@@ -11,8 +11,8 @@ type DeviceTypes struct {
 }
 
 type DeviceType struct {
-	Name       string
-	Identifier string
+	Name          string
+	Identifier    string
 	ProductFamily string
 }
 

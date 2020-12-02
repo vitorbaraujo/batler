@@ -1,2 +1,9 @@
 linters:
   enable-all: true
+  disable:
+    - funlen
+    - gochecknoglobals
+    - gochecknoinits
+    - goerr113
+    - nlreturn
+    - wsl

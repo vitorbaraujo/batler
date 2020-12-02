@@ -1,4 +1,6 @@
 package simctl
 
-var ParseDeviceTypesOutput = parseDeviceTypesOutput
-var ParseRuntimesOutput = parseRuntimesOutput
+var (
+	ParseDeviceTypesOutput = parseDeviceTypesOutput
+	ParseRuntimesOutput    = parseRuntimesOutput
+)

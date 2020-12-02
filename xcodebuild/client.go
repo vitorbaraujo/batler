@@ -8,24 +8,24 @@ import (
 	"github.com/vitorbaraujo/batler/configuration"
 )
 
-type client struct {
-	workspace, scheme, buildDir, xcodeDir string
+type Client struct {
+	workspace, scheme, buildDir, xcodeDir   string
 	cleanEnabled, buildEnabled, testEnabled bool
 }
 
-type Option func(*client)
+type Option func(*Client)
 
-func NewClient(config *configuration.Configuration, opts ...Option) (*client, error) {
+func NewClient(config *configuration.Configuration, opts ...Option) (*Client, error) {
 	xcodeDir, err := config.XcodeDir()
 	if err != nil {
 		return nil, fmt.Errorf("fetching xcode developer directory: %w", err)
 	}
 
-	c := &client{
+	c := &Client{
 		workspace: config.Workspace,
-		scheme: config.Scheme,
-		buildDir: config.BuildDir,
-		xcodeDir: xcodeDir,
+		scheme:    config.Scheme,
+		buildDir:  config.BuildDir,
+		xcodeDir:  xcodeDir,
 	}
 
 	for _, opt := range opts {
@@ -36,24 +36,24 @@ func NewClient(config *configuration.Configuration, opts ...Option) (*client, er
 }
 
 func WithClean() Option {
-	return func(c *client) {
+	return func(c *Client) {
 		c.cleanEnabled = true
 	}
 }
 
 func WithBuild() Option {
-	return func(c *client) {
+	return func(c *Client) {
 		c.buildEnabled = true
 	}
 }
 
 func WithTest() Option {
-	return func(c *client) {
+	return func(c *Client) {
 		c.testEnabled = true
 	}
 }
 
-func (c *client) Run() error {
+func (c *Client) Run() error {
 	args := []string{
 		"-workspace",
 		c.workspace,
@@ -66,9 +66,11 @@ func (c *client) Run() error {
 	if c.cleanEnabled {
 		args = append(args, "clean")
 	}
+
 	if c.buildEnabled {
 		args = append(args, "build")
 	}
+
 	if c.testEnabled {
 		args = append(args, "test")
 	}

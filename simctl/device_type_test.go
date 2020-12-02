@@ -8,10 +8,11 @@ import (
 )
 
 func TestParseDeviceTypes(t *testing.T) {
-	tests := []struct{
-		name string
+	t.Parallel()
+	tests := []struct {
+		name   string
 		output []byte
-		want []*simctl.DeviceType
+		want   []*simctl.DeviceType
 	}{
 		{
 			name: "noDevices",
@@ -48,13 +49,13 @@ func TestParseDeviceTypes(t *testing.T) {
 			`),
 			want: []*simctl.DeviceType{
 				{
-					Name: "iPhone 4s",
-					Identifier: "com.apple.CoreSimulator.SimDeviceType.iPhone-4s",
+					Name:          "iPhone 4s",
+					Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-4s",
 					ProductFamily: "iPhone",
 				},
 				{
-					Name: "iPhone 5",
-					Identifier: "com.apple.CoreSimulator.SimDeviceType.iPhone-5",
+					Name:          "iPhone 5",
+					Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-5",
 					ProductFamily: "iPhone",
 				},
 			},
@@ -64,13 +65,14 @@ func TestParseDeviceTypes(t *testing.T) {
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			got, err := simctl.ParseDeviceTypesOutput(test.output)
 			if err != nil {
 				t.Errorf("ParseDeviceTypesOutput returned err %v", err)
 			}
 
 			if diff := pretty.CycleTracker.Compare(got, test.want); diff != "" {
-			    t.Errorf("post- diff: (-got +want)\n%v", diff)
+				t.Errorf("post- diff: (-got +want)\n%v", diff)
 			}
 		})
 	}

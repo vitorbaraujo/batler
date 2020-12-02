@@ -15,11 +15,11 @@ import (
 const configName = ".batler.yml"
 
 type Configuration struct {
-	BuildDir string `yaml:"build_dir"`
-	Scheme string
-	XcodeVersion string `yaml:"xcode_version"`
+	BuildDir          string `yaml:"build_dir"`
+	Scheme            string
+	XcodeVersion      string `yaml:"xcode_version"`
 	XcodeDeveloperDir string `yaml:"xcode_developer_dir"`
-	Workspace string
+	Workspace         string
 }
 
 func (c *Configuration) IsValid() error {
@@ -49,6 +49,7 @@ func (c *Configuration) XcodeDir() (string, error) {
 
 	if c.XcodeVersion == "" && c.XcodeDeveloperDir == "" {
 		cmd := exec.Command("xcode-select", "-p")
+
 		defaultXcodePath, err := cmd.Output()
 		if err != nil {
 			return "", errors.New("cannot fetch default xcode path using `xcode-select -p`")
@@ -72,7 +73,7 @@ func FetchConfiguration(projectPath string) (*Configuration, error) {
 
 	yamlFile, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read file: %v", err)
+		return nil, fmt.Errorf("could not read file: %w", err)
 	}
 
 	c := Configuration{}

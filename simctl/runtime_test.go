@@ -8,10 +8,12 @@ import (
 )
 
 func TestParseRuntimes(t *testing.T) {
-	tests := []struct{
-		name string
+	t.Parallel()
+
+	tests := []struct {
+		name   string
 		output []byte
-		want []*simctl.Runtime
+		want   []*simctl.Runtime
 	}{
 		{
 			name: "noRuntimes",
@@ -50,13 +52,13 @@ func TestParseRuntimes(t *testing.T) {
 			`),
 			want: []*simctl.Runtime{
 				{
-					Name: "iOS 12.0",
+					Name:       "iOS 12.0",
 					Identifier: "com.apple.CoreSimulator.SimRuntime.iOS-12-0",
 				},
 				{
-					Name: "iOS 14.2",
+					Name:       "iOS 14.2",
 					Identifier: "com.apple.CoreSimulator.SimRuntime.iOS-14-2",
-					Available: true,
+					Available:  true,
 				},
 			},
 		},
@@ -65,6 +67,8 @@ func TestParseRuntimes(t *testing.T) {
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
 			got, err := simctl.ParseRuntimesOutput(test.output)
 			if err != nil {
 				t.Errorf("ParseDeviceTypesOutput returned err %v", err)
