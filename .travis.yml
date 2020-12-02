@@ -4,4 +4,4 @@ go:
   - "1.15"
 
 script:
-  - make check cover
+  - make lint check cover
