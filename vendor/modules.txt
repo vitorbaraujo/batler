@@ -165,6 +165,9 @@ github.com/matoous/godox
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
+# github.com/mattn/goveralls v0.0.7
+## explicit
+github.com/mattn/goveralls
 # github.com/mbilski/exhaustivestruct v1.1.0
 github.com/mbilski/exhaustivestruct/pkg/analyzer
 # github.com/mitchellh/go-homedir v1.1.0
@@ -277,6 +280,7 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
 # golang.org/x/tools v0.0.0-20201013201025-64a9e34f3752
+golang.org/x/tools/cover
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/passes/asmdecl
 golang.org/x/tools/go/analysis/passes/assign
