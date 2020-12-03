@@ -8,9 +8,12 @@ A Xcode test CLI for continuous integration.
 ## Installation
 
 ```sh
-go get github.com/vitorbaraujo/batler/cmd/batler
+go get -u github.com/vitorbaraujo/batler/cmd/batler
 ```
 
 ## TODO
 
 - Add brew formula
+- Add logging (+ verbose option)
+- Add xcpretty integration
+- Add slather integration
