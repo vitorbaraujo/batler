@@ -264,6 +264,10 @@ github.com/ultraware/funlen
 github.com/ultraware/whitespace
 # github.com/uudashr/gocognit v1.0.1
 github.com/uudashr/gocognit
+# golang.org/x/lint v0.0.0-20190930215403-16217165b5de
+## explicit
+golang.org/x/lint
+golang.org/x/lint/golint
 # golang.org/x/mod v0.3.0
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
