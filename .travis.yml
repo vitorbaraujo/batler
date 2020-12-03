@@ -5,4 +5,4 @@ go:
 
 script:
   - make lint check cover
-  - go run github.com/mattn/goveralls -coverprofile=coverage.out -service=travis-ci
+  - bash <(curl -s https://codecov.io/bash)
