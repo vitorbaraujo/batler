@@ -3,7 +3,7 @@ GOLANGCI_LINT := $(GO) run github.com/golangci/golangci-lint/cmd/golangci-lint
 
 .PHONY: check
 check:
-	$(GO) test ./... -coverprofile=coverage.out
+	$(GO) test ./... -coverpkg=./... -coverprofile=coverage.out
 
 .PHONY: lint
 lint:
