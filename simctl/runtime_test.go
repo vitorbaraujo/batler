@@ -1,32 +1,48 @@
 package simctl_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/vitorbaraujo/batler/simctl"
 )
 
+func TestParseRuntimesError(t *testing.T) {
+	t.Parallel()
+	invalidJSON := `{"runtimes": {},}`
+
+	_, err := simctl.ParseRuntimesOutput([]byte(invalidJSON))
+	if err == nil {
+		t.Errorf("ParseRuntimesOutput should have returned error")
+	}
+
+	wantErr := "parsing runtimes output"
+	if !strings.Contains(err.Error(), wantErr) {
+		t.Errorf("ParseRuntimesOutput returner err = %v, want %q", err, wantErr)
+	}
+}
+
 func TestParseRuntimes(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name   string
-		output []byte
+		output string
 		want   []*simctl.Runtime
 	}{
 		{
 			name: "noRuntimes",
-			output: []byte(`
+			output: `
 				{
 					"runtimes": []
 				}
-			`),
+			`,
 			want: []*simctl.Runtime{},
 		},
 		{
 			name: "someDevices",
-			output: []byte(`
+			output: `
 				{
 					"runtimes": [
 						{
@@ -49,7 +65,7 @@ func TestParseRuntimes(t *testing.T) {
 						}
 					]
 				}
-			`),
+			`,
 			want: []*simctl.Runtime{
 				{
 					Name:       "iOS 12.0",
@@ -69,7 +85,7 @@ func TestParseRuntimes(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := simctl.ParseRuntimesOutput(test.output)
+			got, err := simctl.ParseRuntimesOutput([]byte(test.output))
 			if err != nil {
 				t.Errorf("ParseDeviceTypesOutput returned err %v", err)
 			}

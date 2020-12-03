@@ -1,31 +1,47 @@
 package simctl_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/vitorbaraujo/batler/simctl"
 )
 
+func TestParseDeviceTypesError(t *testing.T) {
+	t.Parallel()
+	invalidJSON := `{"devicetypes": {},}`
+
+	_, err := simctl.ParseDeviceTypesOutput([]byte(invalidJSON))
+	if err == nil {
+		t.Errorf("ParseDeviceTypesOutput should have returned error")
+	}
+
+	wantErr := "parsing devicetypes output"
+	if !strings.Contains(err.Error(), wantErr) {
+		t.Errorf("ParseDeviceTypesOutput returner err = %v, want %q", err, wantErr)
+	}
+}
+
 func TestParseDeviceTypes(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name   string
-		output []byte
+		output string
 		want   []*simctl.DeviceType
 	}{
 		{
 			name: "noDevices",
-			output: []byte(`
+			output: `
 				{
 					"devicetypes": []
 				}
-			`),
+			`,
 			want: []*simctl.DeviceType{},
 		},
 		{
 			name: "someDevices",
-			output: []byte(`
+			output: `
 				{
 					"devicetypes": [
 						{
@@ -46,7 +62,7 @@ func TestParseDeviceTypes(t *testing.T) {
 						}
 					]
 				}
-			`),
+			`,
 			want: []*simctl.DeviceType{
 				{
 					Name:          "iPhone 4s",
@@ -66,7 +82,7 @@ func TestParseDeviceTypes(t *testing.T) {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := simctl.ParseDeviceTypesOutput(test.output)
+			got, err := simctl.ParseDeviceTypesOutput([]byte(test.output))
 			if err != nil {
 				t.Errorf("ParseDeviceTypesOutput returned err %v", err)
 			}
