@@ -6,18 +6,22 @@ import (
 	"os/exec"
 )
 
+// Runtimes is the representation for the runtimes list from `simctl`.
 type Runtimes struct {
 	Runtimes []*Runtime `json:"runtimes"`
 }
 
+// Runtime represents a simulator runtime.
 type Runtime struct {
 	Name       string
 	Identifier string
 	Available  bool `json:"isAvailable"`
 }
 
-func ListRuntimes() ([]*Runtime, error) {
+// ListRuntimes lists all existing runtimes from the current Xcode version.
+func ListRuntimes(xcodePath string) ([]*Runtime, error) {
 	cmd := exec.Command("xcrun", "simctl", "list", "runtimes", "--json")
+	cmd.Env = append(cmd.Env, fmt.Sprintf("DEVELOPER_DIR=%s", xcodePath))
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("running simctl list: %w", err)

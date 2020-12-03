@@ -14,6 +14,7 @@ import (
 
 const configName = ".batler.yml"
 
+// Configuration contains configuration parameters for the CLI.
 type Configuration struct {
 	BuildDir          string `yaml:"build_dir"`
 	Scheme            string
@@ -23,26 +24,7 @@ type Configuration struct {
 	Workspace         string
 }
 
-func (c *Configuration) IsValid() error {
-	if c.BuildDir == "" {
-		return errors.New("missing build_dir")
-	}
-
-	if c.Scheme == "" {
-		return errors.New("missing scheme")
-	}
-
-	if c.Workspace == "" {
-		return errors.New("missing workspace")
-	}
-
-	if c.xcodeVersion != "" && c.xcodeDeveloperDir != "" {
-		return errors.New("cannot set xcode_version and xcode_developer_dir at the same time")
-	}
-
-	return nil
-}
-
+// FetchConfiguration retrieves configurations from the config file inside projectPath.
 func FetchConfiguration(projectPath string) (*Configuration, error) {
 	configPath := filepath.Join(projectPath, configName)
 	if !fileExists(configPath) {
@@ -62,7 +44,7 @@ func FetchConfiguration(projectPath string) (*Configuration, error) {
 	c.Workspace = filepath.Join(projectPath, c.Workspace)
 	c.BuildDir = filepath.Join(projectPath, c.BuildDir)
 
-	if err := c.IsValid(); err != nil {
+	if err := c.isValid(); err != nil {
 		return nil, fmt.Errorf("configuration is not valid: %w", err)
 	}
 
@@ -72,6 +54,26 @@ func FetchConfiguration(projectPath string) (*Configuration, error) {
 	}
 
 	return &c, nil
+}
+
+func (c *Configuration) isValid() error {
+	if c.BuildDir == "" {
+		return errors.New("missing build_dir")
+	}
+
+	if c.Scheme == "" {
+		return errors.New("missing scheme")
+	}
+
+	if c.Workspace == "" {
+		return errors.New("missing workspace")
+	}
+
+	if c.xcodeVersion != "" && c.xcodeDeveloperDir != "" {
+		return errors.New("cannot set xcode_version and xcode_developer_dir at the same time")
+	}
+
+	return nil
 }
 
 func getXcodePath(xcodeVersion, xcodeDeveloperDir string) (string, error) {

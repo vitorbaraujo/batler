@@ -8,13 +8,16 @@ import (
 	"github.com/vitorbaraujo/batler/configuration"
 )
 
+// Client contains methods for cleaning, building and testing an Xcode application.
 type Client struct {
 	workspace, scheme, buildDir, xcodeDir   string
 	cleanEnabled, buildEnabled, testEnabled bool
 }
 
+// Option is a configuration option for the Xcodebuild client.
 type Option func(*Client)
 
+// NewClient creates a new Xcodebuild client.
 func NewClient(config *configuration.Configuration, opts ...Option) (*Client, error) {
 	c := &Client{
 		workspace: config.Workspace,
@@ -30,24 +33,28 @@ func NewClient(config *configuration.Configuration, opts ...Option) (*Client, er
 	return c, nil
 }
 
+// WithClean enables cleaning the iOS application.
 func WithClean() Option {
 	return func(c *Client) {
 		c.cleanEnabled = true
 	}
 }
 
+// WithBuild enables building the iOS application.
 func WithBuild() Option {
 	return func(c *Client) {
 		c.buildEnabled = true
 	}
 }
 
+// WithTest enables running tests the iOS application.
 func WithTest() Option {
 	return func(c *Client) {
 		c.testEnabled = true
 	}
 }
 
+// Run runs `xcodebuild` with the actions enabled using options.
 func (c *Client) Run() error {
 	args := []string{
 		"-workspace",
