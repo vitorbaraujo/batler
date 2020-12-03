@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	flags = struct {
+	version = "0.1.0"
+	flags   = struct {
 		projectPath string
 	}{}
 	rootCmd = &cobra.Command{
@@ -20,6 +21,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			runBatler()
 		},
+		Version: version,
 	}
 )
 
