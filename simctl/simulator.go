@@ -7,10 +7,9 @@ import (
 	"strings"
 )
 
-// Creates an arbitrary iOS simulator from existing runtimes and devicetypes.
+// CreateSimulator creates an arbitrary iOS simulator from existing runtimes and devicetypes.
 // This method returns the identifier for the newly created simulator or an error, otherwise.
 func CreateSimulator(xcodePath string) (string, error) {
-	var err error
 	runtimes, err := ListRuntimes(xcodePath)
 	if err != nil {
 		return "", fmt.Errorf("could not get runtimes: %w", err)
@@ -22,10 +21,10 @@ func CreateSimulator(xcodePath string) (string, error) {
 	}
 
 	for _, runtime := range runtimes {
-		for _, deviceType := range deviceTypes.Types {
-
+		for _, deviceType := range deviceTypes {
+			deviceName := createDeviceName(runtime.Identifier, deviceType.Identifier)
 			cmd := exec.Command("xcrun", "simctl", "create",
-				createDeviceName(runtime.Identifier, deviceType.Identifier), deviceType.Identifier, runtime.Identifier)
+				deviceName, deviceType.Identifier, runtime.Identifier)
 			cmd.Env = os.Environ()
 			cmd.Env = append(cmd.Env, fmt.Sprintf("DEVELOPER_DIR=%s", xcodePath))
 
@@ -34,20 +33,20 @@ func CreateSimulator(xcodePath string) (string, error) {
 				continue
 			}
 
-			simulatorId := strings.TrimRight(string(output), "\r\n")
-			return simulatorId, nil
+			simulatorID := strings.TrimRight(string(output), "\r\n")
+			return simulatorID, nil
 		}
 	}
 
 	return "", fmt.Errorf("could not create simulator from device types and runtimes")
 }
 
-func createDeviceName(runtimeId, deviceTypeId string) string {
-	runtimeIdParts := strings.Split(runtimeId, ".")
-	osVersion := runtimeIdParts[len(runtimeIdParts)-1]
+func createDeviceName(runtimeID, deviceTypeID string) string {
+	runtimeIDParts := strings.Split(runtimeID, ".")
+	osVersion := runtimeIDParts[len(runtimeIDParts)-1]
 
-	deviceIdParts := strings.Split(deviceTypeId, ".")
-	deviceIdName := deviceIdParts[len(deviceIdParts)-1]
+	deviceIDParts := strings.Split(deviceTypeID, ".")
+	deviceIDName := deviceIDParts[len(deviceIDParts)-1]
 
-	return fmt.Sprintf("%s-%s", deviceIdName, osVersion)
+	return fmt.Sprintf("%s-%s", deviceIDName, osVersion)
 }

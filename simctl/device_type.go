@@ -6,8 +6,7 @@ import (
 	"os/exec"
 )
 
-// DeviceTypes is the representation for the device types list from `simctl`.
-type DeviceTypes struct {
+type deviceTypes struct {
 	Types []*DeviceType `json:"devicetypes"`
 }
 
@@ -19,7 +18,7 @@ type DeviceType struct {
 }
 
 // ListDeviceTypes lists all existing device types for the current Xcode version.
-func ListDeviceTypes(xcodePath string) (*DeviceTypes, error) {
+func ListDeviceTypes(xcodePath string) ([]*DeviceType, error) {
 	cmd := exec.Command("xcrun", "simctl", "list", "devicetypes", "--json")
 	cmd.Env = append(cmd.Env, fmt.Sprintf("DEVELOPER_DIR=%s", xcodePath))
 	output, err := cmd.CombinedOutput()
@@ -30,12 +29,11 @@ func ListDeviceTypes(xcodePath string) (*DeviceTypes, error) {
 	return parseDeviceTypesOutput(output)
 }
 
-func parseDeviceTypesOutput(output []byte) (*DeviceTypes, error) {
-	var dt *DeviceTypes
-
+func parseDeviceTypesOutput(output []byte) ([]*DeviceType, error) {
+	var dt *deviceTypes
 	if err := json.Unmarshal(output, &dt); err != nil {
 		return nil, fmt.Errorf("parsing devicetypes output: %w", err)
 	}
 
-	return dt, nil
+	return dt.Types, nil
 }

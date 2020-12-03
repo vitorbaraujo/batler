@@ -29,7 +29,7 @@ func TestParseDeviceTypes(t *testing.T) {
 	tests := []struct {
 		name   string
 		output string
-		want   *simctl.DeviceTypes
+		want   []*simctl.DeviceType
 	}{
 		{
 			name: "noDevices",
@@ -38,7 +38,7 @@ func TestParseDeviceTypes(t *testing.T) {
 					"devicetypes": []
 				}
 			`,
-			want: &simctl.DeviceTypes{},
+			want: []*simctl.DeviceType{},
 		},
 		{
 			name: "someDevices",
@@ -64,18 +64,16 @@ func TestParseDeviceTypes(t *testing.T) {
 					]
 				}
 			`,
-			want: &simctl.DeviceTypes{
-				Types: []*simctl.DeviceType{
-					{
-						Name:          "iPhone 4s",
-						Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-4s",
-						ProductFamily: "iPhone",
-					},
-					{
-						Name:          "iPhone 5",
-						Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-5",
-						ProductFamily: "iPhone",
-					},
+			want: []*simctl.DeviceType{
+				{
+					Name:          "iPhone 4s",
+					Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-4s",
+					ProductFamily: "iPhone",
+				},
+				{
+					Name:          "iPhone 5",
+					Identifier:    "com.apple.CoreSimulator.SimDeviceType.iPhone-5",
+					ProductFamily: "iPhone",
 				},
 			},
 		},

@@ -7,7 +7,7 @@ import (
 )
 
 // Runtimes is the representation for the runtimes list from `simctl`.
-type Runtimes struct {
+type runtimes struct {
 	Runtimes []*Runtime `json:"runtimes"`
 }
 
@@ -31,8 +31,7 @@ func ListRuntimes(xcodePath string) ([]*Runtime, error) {
 }
 
 func parseRuntimesOutput(output []byte) ([]*Runtime, error) {
-	var dt *Runtimes
-
+	var dt *runtimes
 	if err := json.Unmarshal(output, &dt); err != nil {
 		return nil, fmt.Errorf("parsing runtimes output: %w", err)
 	}

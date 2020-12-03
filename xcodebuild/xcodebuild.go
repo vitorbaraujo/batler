@@ -2,9 +2,10 @@ package xcodebuild
 
 import (
 	"fmt"
-	"github.com/vitorbaraujo/batler/simctl"
 	"os"
 	"os/exec"
+
+	"github.com/vitorbaraujo/batler/simctl"
 
 	"github.com/vitorbaraujo/batler/configuration"
 )
@@ -51,6 +52,6 @@ func Run(config *configuration.Configuration) error {
 	return nil
 }
 
-func formatDestinationOutput(simulatorId string) string {
-	return fmt.Sprintf("platform=iOS Simulator,id=%s", simulatorId)
+func formatDestinationOutput(simulatorID string) string {
+	return fmt.Sprintf("platform=iOS Simulator,id=%s", simulatorID)
 }
