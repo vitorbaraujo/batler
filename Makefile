@@ -14,5 +14,12 @@ lint:
 	$(GOLINT) -set_exit_status $(PACKAGES)
 
 .PHONY: cover
-cover:
+cover: cover/text
+
+.PHONY: cover/text
+cover/text:
 	$(GO) tool cover -func=coverage.out
+
+.PHONY: cover/html
+cover/html:
+	$(GO) tool cover -html=coverage.out
