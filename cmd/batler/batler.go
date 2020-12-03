@@ -34,13 +34,7 @@ func runBatler() {
 		log.Fatalf("could not fetch configuration: %v", err)
 	}
 
-	client, err := xcodebuild.NewClient(config,
-		xcodebuild.WithClean(), xcodebuild.WithBuild(), xcodebuild.WithTest())
-	if err != nil {
-		log.Fatalf("creating xcodebuild client: %v", err)
-	}
-
-	if err := client.Run(); err != nil {
+	if err := xcodebuild.Run(config); err != nil {
 		log.Printf("could not run client: %v", err)
 	}
 }

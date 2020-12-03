@@ -16,14 +16,18 @@ const configName = ".batler.yml"
 
 // Configuration contains configuration parameters for the Xcode application.
 type Configuration struct {
-	BuildDir  string
-	Scheme    string
-	XcodePath string
-	Workspace string
+	CleanBuild  bool
+	BuildDir    string
+	Destination string
+	Scheme      string
+	XcodePath   string
+	Workspace   string
 }
 
 type configurationFile struct {
+	Clean             bool   `yaml:"clean"`
 	BuildDir          string `yaml:"build_dir"`
+	Destination       string `yaml:"destination"`
 	Scheme            string `yaml:"scheme"`
 	XcodeVersion      string `yaml:"xcode_version"`
 	XcodeDeveloperDir string `yaml:"xcode_developer_dir"`
@@ -52,9 +56,11 @@ func createConfiguration(fileContent []byte, projectPath string) (*Configuration
 	}
 
 	config := &Configuration{
-		BuildDir:  filepath.Join(projectPath, configFile.BuildDir),
-		Scheme:    configFile.Scheme,
-		Workspace: filepath.Join(projectPath, configFile.Workspace),
+		CleanBuild:  configFile.Clean,
+		BuildDir:    filepath.Join(projectPath, configFile.BuildDir),
+		Destination: configFile.Destination,
+		Scheme:      configFile.Scheme,
+		Workspace:   filepath.Join(projectPath, configFile.Workspace),
 	}
 
 	if err := configFile.isValid(); err != nil {

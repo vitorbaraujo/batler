@@ -4,8 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kylelemons/godebug/pretty"
 	"github.com/vitorbaraujo/batler/simctl"
+
+	"github.com/kylelemons/godebug/pretty"
 )
 
 func TestParseDeviceTypesError(t *testing.T) {
