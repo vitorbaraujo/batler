@@ -14,14 +14,20 @@ import (
 
 const configName = ".batler.yml"
 
-// Configuration contains configuration parameters for the CLI.
+// Configuration contains configuration parameters for the Xcode application.
 type Configuration struct {
+	BuildDir  string
+	Scheme    string
+	XcodePath string
+	Workspace string
+}
+
+type configurationFile struct {
 	BuildDir          string `yaml:"build_dir"`
-	Scheme            string
-	xcodeVersion      string `yaml:"xcode_version"`
-	xcodeDeveloperDir string `yaml:"xcode_developer_dir"`
-	XcodePath         string
-	Workspace         string
+	Scheme            string `yaml:"scheme"`
+	XcodeVersion      string `yaml:"xcode_version"`
+	XcodeDeveloperDir string `yaml:"xcode_developer_dir"`
+	Workspace         string `yaml:"workspace"`
 }
 
 // FetchConfiguration retrieves configurations from the config file inside projectPath.
@@ -36,27 +42,35 @@ func FetchConfiguration(projectPath string) (*Configuration, error) {
 		return nil, fmt.Errorf("could not read file: %w", err)
 	}
 
-	c := Configuration{}
-	if err := yaml.Unmarshal(yamlFile, &c); err != nil {
+	return createConfiguration(yamlFile, projectPath)
+}
+
+func createConfiguration(fileContent []byte, projectPath string) (*Configuration, error) {
+	configFile := &configurationFile{}
+	if err := yaml.Unmarshal(fileContent, configFile); err != nil {
 		return nil, fmt.Errorf("could not parse yaml file: %w", err)
 	}
 
-	c.Workspace = filepath.Join(projectPath, c.Workspace)
-	c.BuildDir = filepath.Join(projectPath, c.BuildDir)
+	config := &Configuration{
+		BuildDir:  filepath.Join(projectPath, configFile.BuildDir),
+		Scheme:    configFile.Scheme,
+		Workspace: filepath.Join(projectPath, configFile.Workspace),
+	}
 
-	if err := c.isValid(); err != nil {
+	if err := configFile.isValid(); err != nil {
 		return nil, fmt.Errorf("configuration is not valid: %w", err)
 	}
 
-	c.XcodePath, err = getXcodePath(c.xcodeVersion, c.xcodeDeveloperDir)
+	var err error
+	config.XcodePath, err = getXcodePath(configFile.XcodeVersion, configFile.XcodeDeveloperDir)
 	if err != nil {
 		return nil, fmt.Errorf("could not get xcode path: %w", err)
 	}
 
-	return &c, nil
+	return config, nil
 }
 
-func (c *Configuration) isValid() error {
+func (c configurationFile) isValid() error {
 	if c.BuildDir == "" {
 		return errors.New("missing build_dir")
 	}
@@ -69,7 +83,7 @@ func (c *Configuration) isValid() error {
 		return errors.New("missing workspace")
 	}
 
-	if c.xcodeVersion != "" && c.xcodeDeveloperDir != "" {
+	if c.XcodeVersion != "" && c.XcodeDeveloperDir != "" {
 		return errors.New("cannot set xcode_version and xcode_developer_dir at the same time")
 	}
 
@@ -79,7 +93,6 @@ func (c *Configuration) isValid() error {
 func getXcodePath(xcodeVersion, xcodeDeveloperDir string) (string, error) {
 	if xcodeVersion == "" && xcodeDeveloperDir == "" {
 		cmd := exec.Command("xcode-select", "-p")
-
 		defaultXcodePath, err := cmd.Output()
 		if err != nil {
 			return "", errors.New("cannot fetch default xcode path using `xcode-select -p`")

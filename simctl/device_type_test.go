@@ -19,7 +19,7 @@ func TestParseDeviceTypesError(t *testing.T) {
 
 	wantErr := "parsing devicetypes output"
 	if !strings.Contains(err.Error(), wantErr) {
-		t.Errorf("ParseDeviceTypesOutput returner err = %v, want %q", err, wantErr)
+		t.Errorf("ParseDeviceTypesOutput returned err = %v, want %q", err, wantErr)
 	}
 }
 

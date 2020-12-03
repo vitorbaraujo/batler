@@ -19,7 +19,7 @@ func TestParseRuntimesError(t *testing.T) {
 
 	wantErr := "parsing runtimes output"
 	if !strings.Contains(err.Error(), wantErr) {
-		t.Errorf("ParseRuntimesOutput returner err = %v, want %q", err, wantErr)
+		t.Errorf("ParseRuntimesOutput returned err = %v, want %q", err, wantErr)
 	}
 }
 

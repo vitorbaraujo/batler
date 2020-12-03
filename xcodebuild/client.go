@@ -47,7 +47,7 @@ func WithBuild() Option {
 	}
 }
 
-// WithTest enables running tests the iOS application.
+// WithTest enables running tests on the iOS application.
 func WithTest() Option {
 	return func(c *Client) {
 		c.testEnabled = true
