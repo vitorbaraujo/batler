@@ -11,7 +11,9 @@ import (
 )
 
 var (
-	config  *configuration.Configuration
+	flags = struct {
+		projectPath string
+	}{}
 	rootCmd = &cobra.Command{
 		Use:   "batler",
 		Short: "Batler is an Xcode test CLI for continuous integration",
@@ -19,9 +21,6 @@ var (
 			runBatler()
 		},
 	}
-	flags = struct {
-		projectPath string
-	}{}
 )
 
 func init() {
@@ -30,8 +29,7 @@ func init() {
 }
 
 func runBatler() {
-	var err error
-	config, err = configuration.FetchConfiguration(flags.projectPath)
+	config, err := configuration.FetchConfiguration(flags.projectPath)
 	if err != nil {
 		log.Fatalf("could not fetch configuration: %v", err)
 	}

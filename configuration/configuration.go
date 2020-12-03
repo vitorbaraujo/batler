@@ -17,8 +17,9 @@ const configName = ".batler.yml"
 type Configuration struct {
 	BuildDir          string `yaml:"build_dir"`
 	Scheme            string
-	XcodeVersion      string `yaml:"xcode_version"`
-	XcodeDeveloperDir string `yaml:"xcode_developer_dir"`
+	xcodeVersion      string `yaml:"xcode_version"`
+	xcodeDeveloperDir string `yaml:"xcode_developer_dir"`
+	XcodePath         string
 	Workspace         string
 }
 
@@ -35,34 +36,11 @@ func (c *Configuration) IsValid() error {
 		return errors.New("missing workspace")
 	}
 
-	if c.XcodeVersion != "" && c.XcodeDeveloperDir != "" {
+	if c.xcodeVersion != "" && c.xcodeDeveloperDir != "" {
 		return errors.New("cannot set xcode_version and xcode_developer_dir at the same time")
 	}
 
 	return nil
-}
-
-func (c *Configuration) XcodeDir() (string, error) {
-	if err := c.IsValid(); err != nil {
-		return "", fmt.Errorf("configuration is not valid: %w", err)
-	}
-
-	if c.XcodeVersion == "" && c.XcodeDeveloperDir == "" {
-		cmd := exec.Command("xcode-select", "-p")
-
-		defaultXcodePath, err := cmd.Output()
-		if err != nil {
-			return "", errors.New("cannot fetch default xcode path using `xcode-select -p`")
-		}
-
-		return strings.TrimRight(string(defaultXcodePath), "\r\n"), nil
-	}
-
-	if c.XcodeVersion != "" {
-		return fmt.Sprintf("/Applications/Xcode-%s.app/Contents/Developer", c.XcodeVersion), nil
-	}
-
-	return c.XcodeDeveloperDir, nil
 }
 
 func FetchConfiguration(projectPath string) (*Configuration, error) {
@@ -88,7 +66,31 @@ func FetchConfiguration(projectPath string) (*Configuration, error) {
 		return nil, fmt.Errorf("configuration is not valid: %w", err)
 	}
 
+	c.XcodePath, err = getXcodePath(c.xcodeVersion, c.xcodeDeveloperDir)
+	if err != nil {
+		return nil, fmt.Errorf("could not get xcode path: %w", err)
+	}
+
 	return &c, nil
+}
+
+func getXcodePath(xcodeVersion, xcodeDeveloperDir string) (string, error) {
+	if xcodeVersion == "" && xcodeDeveloperDir == "" {
+		cmd := exec.Command("xcode-select", "-p")
+
+		defaultXcodePath, err := cmd.Output()
+		if err != nil {
+			return "", errors.New("cannot fetch default xcode path using `xcode-select -p`")
+		}
+
+		return strings.TrimRight(string(defaultXcodePath), "\r\n"), nil
+	}
+
+	if xcodeVersion != "" {
+		return fmt.Sprintf("/Applications/Xcode-%s.app/Contents/Developer", xcodeVersion), nil
+	}
+
+	return xcodeDeveloperDir, nil
 }
 
 func fileExists(filepath string) bool {

@@ -16,16 +16,11 @@ type Client struct {
 type Option func(*Client)
 
 func NewClient(config *configuration.Configuration, opts ...Option) (*Client, error) {
-	xcodeDir, err := config.XcodeDir()
-	if err != nil {
-		return nil, fmt.Errorf("fetching xcode developer directory: %w", err)
-	}
-
 	c := &Client{
 		workspace: config.Workspace,
 		scheme:    config.Scheme,
 		buildDir:  config.BuildDir,
-		xcodeDir:  xcodeDir,
+		xcodeDir:  config.XcodePath,
 	}
 
 	for _, opt := range opts {
