@@ -5,9 +5,8 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/vitorbaraujo/batler/simctl"
-
 	"github.com/vitorbaraujo/batler/configuration"
+	"github.com/vitorbaraujo/batler/simctl"
 )
 
 // Run runs `xcodebuild` with the given configuration.
