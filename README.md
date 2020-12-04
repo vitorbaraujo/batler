@@ -19,9 +19,13 @@ brew install batler
 batler test [-p <project_path>] [-h]
 ```
 
+### Displaying coverage
+
+```sh
+batler coverage [--project_path <project_path>] [--html] [--output_dir <path>]
+```
+
 ## TODO
 
-- Add brew formula
 - Add logging (+ verbose option)
 - Add xcpretty integration
-- Add slather integration

@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	version = "0.2.0"
+	version = "0.3.0"
 	rootCmd = &cobra.Command{
 		Use:     "batler",
 		Short:   "Batler is an Xcode test CLI for continuous integration",
