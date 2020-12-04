@@ -56,7 +56,7 @@ func CreateSimulator(xcodePath string) (string, error) {
 }
 
 func saveSimulatorOnCache(simulatorID string) error {
-	return ioutil.WriteFile(simulatorCacheFilename, []byte(simulatorID), 0600)
+	return ioutil.WriteFile(simulatorCacheFilename, []byte(simulatorID), 0o600)
 }
 
 func getSimulatorFromCache(xcodePath string) (string, error) {

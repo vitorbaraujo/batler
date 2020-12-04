@@ -88,10 +88,11 @@ scheme: TestScheme
 build_dir: Build
 xcode_version: 11.6`,
 			want: &configuration.Configuration{
-				BuildDir:  "my/project/path/Build",
-				Scheme:    "TestScheme",
-				XcodePath: "/Applications/Xcode-11.6.app/Contents/Developer",
-				Workspace: "my/project/path/MyWorkspace.xcworkspace",
+				BuildDir:     "my/project/path/Build",
+				Scheme:       "TestScheme",
+				XcodePath:    "/Applications/Xcode-11.6.app/Contents/Developer",
+				XcodeProject: "my/project/path",
+				Workspace:    "my/project/path/MyWorkspace.xcworkspace",
 			},
 		},
 		{
@@ -102,10 +103,32 @@ scheme: TestScheme
 build_dir: Build
 xcode_developer_dir: my/xcode/developer/dir`,
 			want: &configuration.Configuration{
-				BuildDir:  "my/project/path/Build",
+				BuildDir:     "my/project/path/Build",
+				Scheme:       "TestScheme",
+				XcodePath:    "my/xcode/developer/dir",
+				XcodeProject: "my/project/path",
+				Workspace:    "my/project/path/MyWorkspace.xcworkspace",
+			},
+		},
+		{
+			name: "coverage_ignoreList",
+			fileContent: `workspace: MyWorkspace.xcworkspace
+scheme: TestScheme
+build_dir: Build
+xcode_version: 12.0
+coverage:
+  exclude:
+  - TestApp/*
+  - vitor
+`,
+			want: &configuration.Configuration{
+				BuildDir:  "Build",
 				Scheme:    "TestScheme",
-				XcodePath: "my/xcode/developer/dir",
-				Workspace: "my/project/path/MyWorkspace.xcworkspace",
+				XcodePath: "/Applications/Xcode-12.0.app/Contents/Developer",
+				Workspace: "MyWorkspace.xcworkspace",
+				Coverage: configuration.CoverageConfig{
+					IgnoredFiles: []string{"TestApp/*", "vitor"},
+				},
 			},
 		},
 		// TODO (vitor.araujo): test default xcode path
