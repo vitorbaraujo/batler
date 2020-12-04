@@ -8,23 +8,28 @@ import (
 	"github.com/vitorbaraujo/batler/xcodebuild"
 )
 
-var testCmd = &cobra.Command{
-	Use:   "test",
-	Short: "Run tests for an iOS application",
-	Run: func(cmd *cobra.Command, args []string) {
-		runTests()
-	},
-}
+var (
+	testFlags = struct {
+		projectPath string
+	}{}
+	testCmd = &cobra.Command{
+		Use:   "test",
+		Short: "Run tests for an iOS application",
+		Run: func(cmd *cobra.Command, args []string) {
+			runTests()
+		},
+	}
+)
 
 func init() {
-	testCmd.Flags().StringVarP(&flags.projectPath, "project_path", "p", "",
+	testCmd.Flags().StringVarP(&testFlags.projectPath, "project_path", "p", "",
 		"The project path for the iOS application. This path must contain a .batler.yml file.")
 
 	rootCmd.AddCommand(testCmd)
 }
 
 func runTests() {
-	config, err := configuration.FetchConfiguration(flags.projectPath)
+	config, err := configuration.FetchConfiguration(testFlags.projectPath)
 	if err != nil {
 		log.Fatalf("could not fetch configuration: %v", err)
 	}

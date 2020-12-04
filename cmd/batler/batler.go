@@ -8,9 +8,6 @@ import (
 
 var (
 	version = "0.2.0"
-	flags   = struct {
-		projectPath string
-	}{}
 	rootCmd = &cobra.Command{
 		Use:     "batler",
 		Short:   "Batler is an Xcode test CLI for continuous integration",
