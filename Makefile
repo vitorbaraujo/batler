@@ -9,6 +9,10 @@ SOURCES := $(shell \
 
 PACKAGES := $(shell $(GO) list ./...)
 
+.PHONY: build
+build:
+	$(GO) build -o build/batler ./cmd/batler/
+
 .PHONY: check
 check:
 	$(GO) test ./... -coverpkg=./... -coverprofile=coverage.out
