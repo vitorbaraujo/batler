@@ -10,3 +10,7 @@ linters:
     - goerr113
     - nlreturn
     - wsl
+
+linters-settings:
+  lll:
+    line-length: 140
