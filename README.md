@@ -11,6 +11,13 @@ A Xcode test CLI for continuous integration.
 go get -u github.com/vitorbaraujo/batler/cmd/batler
 ```
 
+## Usage
+
+### Run tests
+```sh
+batler test [-p <project_path>] [-h]
+```
+
 ## TODO
 
 - Add brew formula
