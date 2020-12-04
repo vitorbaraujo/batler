@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -10,13 +11,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type coverageCmdFlags struct {
+	html        bool
+	outputDir   string
+	projectPath string
+}
+
 var (
-	coverageFlags = struct {
-		html        bool
-		outputDir   string
-		projectPath string
-	}{}
-	coverageCmd = &cobra.Command{
+	coverageFlags = coverageCmdFlags{}
+	coverageCmd   = &cobra.Command{
 		Use:   "coverage",
 		Short: "Retrieve coverage from previously executed tests",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -26,11 +29,14 @@ var (
 )
 
 func init() {
-	coverageCmd.Flags().BoolVar(&coverageFlags.html, "html", false, "Output coverage report to HTML")
+	coverageCmd.Flags().BoolVar(&coverageFlags.html, "html", false, "Exports the coverage report to HTML")
 	coverageCmd.Flags().StringVarP(&coverageFlags.projectPath, "project_path", "p", "",
-		"The project path for the iOS application. This path must contain a .batler.yml file.")
+		"The project path for the iOS application. This path must contain a \".batler.yml\" file. "+
+			"Defaults to current directory")
 	coverageCmd.Flags().StringVarP(&coverageFlags.outputDir, "output_dir", "o", "",
-		"Directory to output report files")
+		"Directory to output report files. "+
+			"This option can only be used when exporting the coverage report."+
+			"Defaults to \"<project_path>/coverage-out/\"")
 
 	rootCmd.AddCommand(coverageCmd)
 }
@@ -41,7 +47,10 @@ func runCoverage() error {
 		return fmt.Errorf("could not fetch configuration: %w", err)
 	}
 
-	if coverageFlags.outputDir == "" {
+	switch {
+	case !isExportingCoverage(coverageFlags) && coverageFlags.outputDir != "":
+		return errors.New("cannot set output_dir without exporting report")
+	case isExportingCoverage(coverageFlags) && coverageFlags.outputDir == "":
 		coverageFlags.outputDir = filepath.Join(coverageFlags.projectPath, "coverage_out")
 	}
 
@@ -54,4 +63,8 @@ func runCoverage() error {
 		XcodeProject:    config.XcodeProject,
 		XcodeWorkspace:  config.Workspace,
 	})
+}
+
+func isExportingCoverage(flags coverageCmdFlags) bool {
+	return flags.html
 }
