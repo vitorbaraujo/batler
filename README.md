@@ -8,7 +8,8 @@ A Xcode test CLI for continuous integration.
 ## Installation
 
 ```sh
-go get -u github.com/vitorbaraujo/batler/cmd/batler
+brew tap vitorbaraujo/formulae
+brew install batler
 ```
 
 ## Usage
