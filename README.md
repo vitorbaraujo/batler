@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/vitorbaraujo/batler.svg?branch=master)](https://travis-ci.com/vitorbaraujo/batler)
 [![codecov](https://codecov.io/gh/vitorbaraujo/batler/branch/master/graph/badge.svg?token=R4NPK8XCRW)](https://codecov.io/gh/vitorbaraujo/batler)
+[![Go Report Card](https://goreportcard.com/badge/github.com/vitorbaraujo/batler)](https://goreportcard.com/report/github.com/vitorbaraujo/batler)
 
 A Xcode test CLI for continuous integration. It aims to ease running tests and retrieving coverage reports for iOS applications.
 
