@@ -54,7 +54,7 @@ func runCoverage() error {
 		coverageFlags.outputDir = filepath.Join(coverageFlags.projectPath, "coverage_out")
 	}
 
-	return slather.Run(&slather.Config{
+	if err = slather.Run(&slather.Config{
 		IgnoredFiles:    config.Coverage.IgnoredFiles,
 		HTMLOutput:      coverageFlags.html,
 		OutputDirectory: coverageFlags.outputDir,
@@ -62,7 +62,11 @@ func runCoverage() error {
 		DerivedDataPath: config.BuildDir,
 		XcodeProject:    config.XcodeProject,
 		XcodeWorkspace:  config.Workspace,
-	})
+	}); err != nil {
+		return fmt.Errorf("could not run slather: %w", err)
+	}
+
+	return nil
 }
 
 func isExportingCoverage(flags coverageCmdFlags) bool {

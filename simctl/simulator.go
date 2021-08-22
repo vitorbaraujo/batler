@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-const simulatorCacheFilename = "/tmp/batler-simulator"
+const (
+	simulatorCacheFilename = "/tmp/batler-simulator"
+	cacheFilePermission    = 0o600
+)
 
 // CreateSimulator creates an arbitrary iOS simulator from existing runtimes and devicetypes.
 // This method returns the identifier for the newly created simulator or an error, otherwise.
@@ -56,7 +59,10 @@ func CreateSimulator(xcodePath string) (string, error) {
 }
 
 func saveSimulatorOnCache(simulatorID string) error {
-	return ioutil.WriteFile(simulatorCacheFilename, []byte(simulatorID), 0o600)
+	if err := ioutil.WriteFile(simulatorCacheFilename, []byte(simulatorID), cacheFilePermission); err != nil {
+		return fmt.Errorf("could not save file: %w", err)
+	}
+	return nil
 }
 
 func getSimulatorFromCache(xcodePath string) (string, error) {
