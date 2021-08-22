@@ -89,17 +89,17 @@ Set of parameters for configuring the coverage report.
 
 #### coverage.exclude
 
-A list of wildcard paths to exclude from the coverage report
+A list of wildcard paths to exclude from the coverage report.
 
 ### clean
 
-If set to true, it will clean the project before building and testing when running `batler test`
+If set to true, it will clean the project before building and testing when running `batler test`.
 
 ### destination
 
 A Xcode iOS simulator destination.
 
-This parameter must be formatted as such: `platform=iOS Simulator,name={device_name},OS={os_version}`
+This parameter must be formatted as such: `platform=iOS Simulator,name={device_name},OS={os_version}`.
 
 If passed, the destination should be exist (check `xcrun simctl list devices` to check available simulators).
 
