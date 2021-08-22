@@ -1,8 +1,0 @@
-language: go
-
-go:
-  - "1.15"
-
-script:
-  - make lint check cover
-  - bash <(curl -s https://codecov.io/bash)

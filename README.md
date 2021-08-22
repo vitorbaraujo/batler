@@ -1,6 +1,6 @@
 # Batler
 
-[![Build Status](https://travis-ci.com/vitorbaraujo/batler.svg?branch=master)](https://travis-ci.com/vitorbaraujo/batler)
+![Build Status](https://github.com/vitorbaraujo/batler/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/vitorbaraujo/batler/branch/master/graph/badge.svg?token=R4NPK8XCRW)](https://codecov.io/gh/vitorbaraujo/batler)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vitorbaraujo/batler)](https://goreportcard.com/report/github.com/vitorbaraujo/batler)
 
@@ -69,7 +69,7 @@ The path where the test artifacts will be stored.
 
 ### xcode_version
 
-The Xcode version to use when running tests. It expects the Xcode installation will be located at `/Applications/Xcode-{version}.app/Contents/Developer`
+The Xcode version to use when running tests. It expects the Xcode installation will be located at `/Applications/Xcode-{version}.app/Contents/Developer`.
 
 If you set this parameter, you cannot use `xcode_developer_dir`.
 
